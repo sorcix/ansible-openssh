@@ -1,0 +1,34 @@
+---
+
+- name: "include distribution-specific variables"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_release | lower }}.yml"
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+- name: "check distribution compatibility"
+  fail:
+    msg: "OpenSSH role is not compatible with {{ ansible_distribution }}."
+  when: not ssh_supported
+
+- name: "install OpenSSH "
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ ssh_packages }}"
+
+- name: "limit access to the ssh configuration directory"
+  file:
+    path: "/etc/ssh"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: 0711
+
+- include: server.yml
+  when: ssh_manage_server
+
+- include: client.yml
+  when: ssh_manage_client

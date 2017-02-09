@@ -1,0 +1,58 @@
+# {{ ansible_managed }}
+
+{% for port in ssh_ports -%}
+Port {{ port }}
+{% endfor %}
+
+ListenAddress 0.0.0.0
+ListenAddress ::
+
+Protocol 2
+
+UseDNS no
+
+AllowTcpForwarding {{ 'yes' if ssh_tcp_forwarding else 'no' }}
+X11Forwarding {{ 'yes' if ssh_x11_forwarding else 'no' }}
+
+MaxStartups 5:50:10
+LoginGraceTime 20
+StrictModes yes
+
+{% for key in ssh_host_keys -%}
+{% if key.accepted -%}
+HostKey /etc/ssh/{{ key.file }}
+{% endif -%}
+{% endfor -%}
+
+KexAlgorithms {{ ssh_kex_algorithms | join(",") }} 
+Ciphers {{ ssh_ciphers | join(",") }}
+MACs {{ ssh_macs | join(",") }}
+
+Banner /etc/ssh/banner
+
+PubkeyAuthentication yes
+Passwordauthentication no
+ChallengeResponseAuthentication no
+AuthenticationMethods publickey
+UsePAM yes
+
+RekeyLimit default 120
+
+Subsystem sftp {{ ssh_sftp_path }}
+
+VersionAddendum {{ inventory_hostname }}:ssh
+
+LogLevel ERROR
+
+PrintLastLog no
+PrintMotd no
+
+ClientAliveInterval {{ ssh_alive_interval }}
+ClientAliveCountMax {{ ssh_alive_count_max }}
+MaxSessions 5
+MaxAuthTries 2
+GatewayPorts {{ 'yes' if ssh_gateway_ports else 'no' }}
+
+PermitRootLogin without-password
+PermitEmptyPasswords no
+AuthorizedKeysFile /etc/ssh/authorized/%u %h/.ssh/authorized_keys

@@ -1,0 +1,10 @@
+---
+
+ssh_supported: true
+
+ssh_sftp_path: "/usr/lib/ssh/sftp-server"
+
+ssh_service: "sshd"
+
+ssh_packages:
+  - "openssh"

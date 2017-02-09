@@ -1,0 +1,38 @@
+Protocol 2
+
+{% if ssh_canonical_domain -%}
+CanonicalDomains {{ ssh_canonical_domain }}
+{% endif -%}
+CanonicalizeFallbackLocal yes
+CanonicalizeHostname yes
+CanonicalizeMaxDots 0
+
+CheckHostIP yes
+HashKnownHosts yes
+
+UseRoaming no
+
+HostbasedAuthentication no 
+NumberOfPasswordPrompts 1
+PreferredAuthentications publickey,keyboard-interactive,password
+
+LogLevel QUIET
+
+UserKnownHostsFile ~/.ssh/known_hosts
+
+IdentityFile ~/.ssh/id_rsa
+
+ServerAliveInterval {{ ssh_alive_interval }}
+ServerAliveCountMax {{ ssh_alive_count_max }}
+
+Host *
+	ForwardAgent no
+	ForwardX11 no
+	ControlMaster {{ "yes" if ssh_control_master else "no" }}
+	ControlPath {{ ssh_control_path }}
+	ControlPersist {{ ssh_control_persist }}
+	PasswordAuthentication no
+	ChallengeResponseAuthentication no
+	PubkeyAuthentication yes
+	KexAlgorithms {{ ssh_kex_algorithms }}
+	HostKeyAlgorithms {{ ssh_host_key_algorithms }}

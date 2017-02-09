@@ -1,0 +1,77 @@
+---
+
+- name: "check ssh root keys list"
+  fail:
+    msg: "The SSH root key list is empty!"
+  when: "ssh_root_keys | length <= 0"
+
+- name: "update server configuration"
+  template:
+    src: "sshd_config.j2"
+    dest: "/etc/ssh/sshd_config"
+    owner: "root"
+    group: "root"
+    mode: 0400
+  notify:
+    - reload sshd
+
+- name: "update banner"
+  template:
+    src: "banner.j2"
+    dest: "/etc/ssh/banner"
+    owner: "root"
+    group: "root"
+    mode: 0400
+
+- name: "create centralized authorized keys directory"
+  file:
+    path: "/etc/ssh/authorized"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: 0511
+
+- name: "update root authorized keys"
+  template:
+    src: "root_authorized.j2"
+    dest: "/etc/ssh/authorized/root"
+    owner: "root"
+    group: "root"
+    mode: 0400
+
+- name: "limit permissions on private keys"
+  file:
+    path: "/etc/ssh/{{ item.file }}"
+    owner: "root"
+    group: "root"
+    mode: 0400
+    state: file
+  with_items: "{{ ssh_host_keys }}"
+
+- name: "limit permissions on moduli"
+  file:
+    path: "/etc/ssh/moduli"
+    owner: "root"
+    group: "root"
+    mode: 0400
+    state: file
+
+- name: "allow world to read public keys"
+  file:
+    path: "/etc/ssh/{{ item.file }}.pub"
+    owner: "root"
+    group: "root"
+    mode: 0444
+    state: file
+  with_items: "{{ ssh_host_keys }}"
+
+- name: "remove the /etc/nologin file"
+  file:
+    path: "/etc/nologin"
+    state: absent
+
+- name: "enable and start the ssh server"
+  service:
+    name: "{{ ssh_service }}"
+    enabled: yes
+    state: started
