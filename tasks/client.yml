@@ -12,3 +12,4 @@
   file:
     path: "/root/.ssh"
     state: absent
+  when: "ssh_remove_root_config"

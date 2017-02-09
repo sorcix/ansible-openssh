@@ -17,6 +17,10 @@ ssh_alive_interval: 10
 
 ssh_root_keys: []
 
+# Set to true to remove the /root/.ssh directory, making the
+# root user always use the server-default client config.
+ssh_remove_root_config: false
+
 ssh_canonical_domain: ""
 
 ssh_control_master: true
