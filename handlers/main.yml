@@ -1,10 +1,6 @@
 ---
 
-- name: include distro-specific variables
-  include_vars: "{{ ansible_os_family | lower }}.yml"
-
-- name: reload sshd
+- name: "reload sshd"
   service:
     name: "{{ ssh_service }}"
     state: reloaded
-
