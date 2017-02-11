@@ -34,5 +34,5 @@ Host *
 	PasswordAuthentication no
 	ChallengeResponseAuthentication no
 	PubkeyAuthentication yes
-	KexAlgorithms {{ ssh_kex_algorithms }}
-	HostKeyAlgorithms {{ ssh_host_key_algorithms }}
+	KexAlgorithms {{ ssh_kex_algorithms | join(",") }}
+	HostKeyAlgorithms {{ ssh_host_key_algorithms | join(",") }}
