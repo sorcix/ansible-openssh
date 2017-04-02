@@ -56,3 +56,10 @@ GatewayPorts {{ 'yes' if ssh_gateway_ports else 'no' }}
 PermitRootLogin without-password
 PermitEmptyPasswords no
 AuthorizedKeysFile /etc/ssh/authorized/%u %h/.ssh/authorized_keys
+
+{% if users is defined -%}
+AllowUsers root
+{% for name, user in users.iteritems() -%}
+AllowUsers {{ name }}
+{% endfor -%}
+{% endif -%}

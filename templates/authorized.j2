@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+
+{% if item.value.authorized is defined and item.value.authorized|length > 0 -%}
+{% for key in item.value.authorized -%}
+{{ key }}
+{% endfor -%}
+{% endif -%}

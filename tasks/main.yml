@@ -30,5 +30,8 @@
 - include: server.yml
   when: ssh_manage_server
 
+- include: users.yml
+  when: ssh_manage_server and users is defined
+
 - include: client.yml
   when: ssh_manage_client

@@ -1,0 +1,10 @@
+---
+
+- name: "update authorized keys"
+  template:
+    src: "authorized.j2"
+    dest: "/etc/ssh/authorized/{{ item.key }}"
+    owner: "root"
+    group: "{{ item.value.group | default(item.key) }}"
+    mode: 0440
+  with_dict: "{{ users }}"
