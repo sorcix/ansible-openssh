@@ -3,7 +3,7 @@
 - name: "check ssh root keys list"
   fail:
     msg: "The SSH root key list is empty!"
-  when: "ssh_root_keys | length <= 0"
+  when: "ssh_root_authorized | length <= 0"
 
 - name: "update server configuration"
   template:
