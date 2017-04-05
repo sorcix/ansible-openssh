@@ -16,6 +16,7 @@ ssh_alive_count_max: 2
 ssh_alive_interval: 10
 
 ssh_root_authorized: []
+ssh_root_authorized_all: false
 
 # Set to true to remove the /root/.ssh directory, making the
 # root user always use the server-default client config.

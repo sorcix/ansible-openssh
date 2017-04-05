@@ -5,3 +5,10 @@
 {{ key }}
 {% endfor -%}
 {% endif -%}
+
+{% if ssh_root_authorized_all -%}
+# Root keys are allowed on all accounts
+{% for key in ssh_root_authorized -%} 
+{{ key }}
+{% endfor -%}
+{% endif -%}
