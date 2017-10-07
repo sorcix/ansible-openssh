@@ -1,5 +1,8 @@
 # {{ ansible_managed }}
 
+{% if item.value.manage_keys is defined and item.value.manage_keys == false -%}
+# SSH keys for this account are not managed by ansible!
+{% else -%}
 {% if item.value.authorized is defined and item.value.authorized|length > 0 -%}
 {% for key in item.value.authorized -%}
 {{ key }}
@@ -11,4 +14,5 @@
 {% for key in ssh_root_authorized -%} 
 {{ key }}
 {% endfor -%}
+{% endif -%}
 {% endif -%}
