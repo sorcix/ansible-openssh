@@ -60,7 +60,7 @@ AuthorizedKeysFile /etc/ssh/authorized/%u %h/.ssh/authorized_keys
 
 {% if users is defined -%}
 AllowUsers root
-{% for name, user in users.iteritems() -%}
+{% for name, user in users.items() -%}
 AllowUsers {{ name }}
 {% endfor -%}
 {% endif -%}
