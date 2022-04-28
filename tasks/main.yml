@@ -27,11 +27,11 @@
     group: "root"
     mode: 0711
 
-- include: server.yml
+- include_tasks: server.yml
   when: ssh_manage_server
 
-- include: users.yml
+- include_tasks: users.yml
   when: ssh_manage_server and users is defined
 
-- include: client.yml
+- include_tasks: client.yml
   when: ssh_manage_client
